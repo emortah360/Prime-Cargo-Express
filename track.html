@@ -253,23 +253,6 @@
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
         }
-        .track-input {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #e2e8f0;
-            transition: all 0.3s ease;
-        }
-        .track-input:focus {
-            border-color: #ff4c00;
-            box-shadow: 0 0 8px rgba(255, 76, 0, 0.3);
-        }
-        .track-button {
-            background: linear-gradient(to right, #ff4c00, #ed8936);
-            transition: all 0.3s ease;
-        }
-        .track-button:hover {
-            transform: scale(1.05);
-        }
         @media (max-width: 640px) {
             .nav-menu {
                 display: none;
@@ -328,10 +311,9 @@
     <div class="container-fluid p-0">
         <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-lg-5">
             <a href="index.html" class="navbar-brand ml-lg-3">
-                            <h1 class="m-0 display-5 text-uppercase text-primary">
-  <img src="Truck logo.png" alt="Logo" style="height:90px; width:auto; margin-right:8px;">
- 
-</h1>
+                <h1 class="m-0 display-5 text-uppercase text-primary">
+                    <img src="Truck logo.png" alt="Logo" style="height:90px; width:auto; margin-right:8px;">
+                </h1>
             </a>
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
@@ -340,9 +322,8 @@
                 <div class="navbar-nav m-auto py-0">
                     <a href="index.html" class="nav-item nav-link">Home</a>
                     <a href="about.html" class="nav-item nav-link">About</a>
-                    <a href="service.html" class="nav-item nav-link">Service</a>
+                    <a href="service.html" class="nav-item nav-link active">Service</a>
                     <a href="contact.html" class="nav-item nav-link">Contact</a>
-                    
                 </div>
             </div>
         </nav>
@@ -360,11 +341,7 @@
     <!-- Tracking Start -->
     <section class="tracker-container" id="tracker">
         <div class="mb-6">
-            <h3 class="text-2xl font-semibold text-white mb-4">Enter Tracking ID</h3>
-            <div class="d-flex">
-                <input type="text" id="trackIdInput" class="form-control track-input mr-3" placeholder="e.g., 123456789012" />
-                <button class="btn track-button text-white py-2 px-4" onclick="trackShipment()">Track</button>
-            </div>
+            <!-- Textbox removed -->
         </div>
         <div class="tracking-info" id="trackingInfo" style="display:none;">
             <h3 id="trackingId"></h3>
@@ -387,7 +364,12 @@
         <div class="row pt-5">
             <div class="col-lg-7 col-md-6">
                 <div class="row">
-                  
+                    <div class="col-md-6 mb-5">
+                        <h3 class="text-primary mb-4">Get In Touch</h3>
+                        <p><i class="fa fa-map-marker-alt mr-2"></i>123 Street, New York, USA</p>
+                        <p><i class="fa fa-phone-alt mr-2"></i>+16267831660</p>
+                        <p><i class="fa fa-envelope mr-2"></i>primecargoexpress@yahoo.com</p>
+                    </div>
                     <div class="col-md-6 mb-5">
                         <h3 class="text-primary mb-4">Quick Links</h3>
                         <div class="d-flex flex-column justify-content-start">
@@ -420,17 +402,16 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
         import { getDatabase, get, ref } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 
-      const firebaseConfig = {
-  apiKey: "AIzaSyAD7zGLcnTjGpfkwK39xCNYqapD5Xojl7M",
-  authDomain: "prime-cargo-express.firebaseapp.com",
-  databaseURL: "https://prime-cargo-express-default-rtdb.firebaseio.com",
-  projectId: "prime-cargo-express",
-  storageBucket: "prime-cargo-express.firebasestorage.app",
-  messagingSenderId: "177293541176",
-  appId: "1:177293541176:web:cae37897a8455252010bcd",
-  measurementId: "G-1VW0FZ9HQB"
-};
-
+        const firebaseConfig = {
+            apiKey: "AIzaSyAD7zGLcnTjGpfkwK39xCNYqapD5Xojl7M",
+            authDomain: "prime-cargo-express.firebaseapp.com",
+            databaseURL: "https://prime-cargo-express-default-rtdb.firebaseio.com",
+            projectId: "prime-cargo-express",
+            storageBucket: "prime-cargo-express.firebasestorage.app",
+            messagingSenderId: "177293541176",
+            appId: "1:177293541176:web:cae37897a8455252010bcd",
+            measurementId: "G-1VW0FZ9HQB"
+        };
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
@@ -443,7 +424,6 @@
         const ownerNameEl = document.getElementById("ownerName");
         const countryNameEl = document.getElementById("countryName");
         const currentLocationEl = document.getElementById("currentLocation").querySelector("span");
-        const trackIdInput = document.getElementById("trackIdInput");
 
         function showNotification(message, type) {
             const notification = document.getElementById("notification");
@@ -558,28 +538,16 @@
             }
         }
 
-        function trackShipment() {
-            const id = trackIdInput.value.trim().toUpperCase();
-            if (!id) {
-                showNotification("Please enter a tracking ID.", "error");
-                return;
-            }
-            window.history.pushState({}, "", `?id=${id}`);
-            fetchTracking(id);
-        }
-
         window.onload = () => {
             const params = new URLSearchParams(window.location.search);
             const id = params.get("id")?.toUpperCase();
             trackerContainer.style.display = "block";
             if (id) {
-                trackIdInput.value = id;
                 fetchTracking(id);
+            } else {
+                showNotification("No tracking ID provided in URL.", "error");
             }
         };
-
-        // Expose function
-        window.trackShipment = trackShipment;
     </script>
 
  <script id="chatway" async="true" src="https://cdn.chatway.app/widget.js?id=iG5x6p2Rcg0y"></script>
@@ -587,5 +555,6 @@
 </body>
 
 </html>
+
 
 
