@@ -315,7 +315,8 @@
                     <img src="Truck logo.png" alt="Logo" style="height:90px; width:auto; margin-right:8px;">
                 </h1>
             </a>
-            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+            <button type="button" class="navbar-toggl
+er" data-toggle="collapse" data-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
@@ -434,7 +435,7 @@
         }
 
         function validateTrackingId(id) {
-            return /^\d{12}$/.test(id);
+            return /^PCE[A-Z0-9]{9}$/.test(id);
         }
 
         function renderSteps(tracking) {
@@ -515,7 +516,7 @@
 
         async function fetchTracking(id) {
             if (!validateTrackingId(id)) {
-                showNotification("Invalid tracking ID format. Must be 12 digits.", "error");
+                showNotification("Invalid tracking ID format. Must start with 'PCE' followed by 9 letters or numbers.", "error");
                 trackingInfo.style.display = "none";
                 stepsList.style.display = "none";
                 return;
@@ -549,12 +550,12 @@
             }
         };
     </script>
-
  <script id="chatway" async="true" src="https://cdn.chatway.app/widget.js?id=iG5x6p2Rcg0y"></script>
 
 </body>
 
 </html>
+
 
 
 
